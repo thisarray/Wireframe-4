@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>image sprite</title>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+canvas {
+  display: block;
+}
+  </style>
+</head>
+
+<body>
+
+<h1>image sprite</h1>
+
+<h2>Original</h2>
+
+<img id="sprite" src="spaceship-images.png" alt="original image sprite" width="252" height="125">
+
+<h2>Split into Left and Right</h2>
+
+<canvas id="left" width="126" height="125"></canvas>
+
+<canvas id="right" width="126" height="125"></canvas>
+
+<script>
+const sprite = document.querySelector('#sprite');
+const leftContext = document.querySelector('#left').getContext('2d');
+const rightContext = document.querySelector('#right').getContext('2d');
+
+window.addEventListener('load', (event) => {
+  leftContext.drawImage(sprite, 0, 0, 126, 125, 5, 0, 126, 125);
+  rightContext.drawImage(sprite, 126, 0, 126, 125, 0, 0, 126, 125);
+});
+</script>
+</body>
+
+</html>
