@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thruster-motion</title>
+  <script src="../jsgame0.js"></script>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+#original {
+  margin-left: 1em;
+}
+  </style>
+</head>
+
+<body>
+<section id="imageLoader" class="hidden">
+  <img class="hidden" src="images/spaceship.png" alt="spaceship">
+  <img class="hidden" src="images/spaceship_thrust.png" alt="spaceship_thrust">
+</section>
+
+<main>
+<h1>thruster-motion</h1>
+
+<canvas id="screen">
+The game screen appears here if your browser supports the Canvas API.
+</canvas>
+<section id="controls">
+  <button type="button" id="reset">Reset</button>
+  <button type="button" id="pause">Pause</button>
+</section>
+
+<h2>Attribution</h2>
+
+<p>This code example is taken from <a href="https://wireframe.raspberrypi.org/issues/4">Wireframe #4 Source Code: Asteroids' thruster motion, pages 32-35</a>.
+The code example was created by Rik Cross.
+The ship images are courtesy of pitrizzo at opengameart.org.</p>
+
+<p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported</a>.</p>
+
+<h2>Original Python code</h2>
+
+<pre id="original"><code>
+import math
+
+# set screen width and height
+WIDTH = 800
+HEIGHT = 800
+
+# create a new spaceship, using the &#x27;spaceship.png&#x27; image
+spaceship = Actor(&#x27;spaceship&#x27;)
+# place the spaceship in the centre of the screen, facing right
+spaceship.center = (WIDTH/2, HEIGHT/2)
+spaceship.angle = 0
+# set an acceleration for the spaceship
+spaceship.ACCELERATION = 0.02
+# initially the spaceship is stationary
+spaceship.x_speed = 0
+spaceship.y_speed = 0
+
+def update():
+    # save the spaceship&#x27;s current angle,
+    # as changing the actor&#x27;s image resets the angle to 0
+    new_angle = spaceship.angle
+
+    # rotate left on left arrow press
+    if keyboard.left:
+        new_angle += 2
+
+    # rotate right on right arrow press
+    if keyboard.right:
+        new_angle -= 2
+
+    # accelerate forwards on up arrow press
+    # and change displayed image
+    if keyboard.up:
+        spaceship.image = &#x27;spaceship_thrust&#x27;
+        spaceship.x_speed += math.cos(math.radians(new_angle)) * spaceship.ACCELERATION
+        spaceship.y_speed += math.sin(math.radians(new_angle)) * spaceship.ACCELERATION
+    else:
+        spaceship.image = &#x27;spaceship&#x27;
+
+    # set the new angle
+    spaceship.angle = new_angle
+
+    # use the x and y speed to update the spaceship position
+    # subtract the y speed as coordinates go from top to bottom
+    spaceship.x += spaceship.x_speed
+    spaceship.y -= spaceship.y_speed
+
+def draw():
+    screen.clear()
+    spaceship.draw()
+</code></pre>
+</main>
+
+<script>
+// set screen width and height
+WIDTH = 800;
+HEIGHT = 800;
+
+var spaceship;
+
+function reset() {
+  // create a new spaceship, using the 'spaceship.png' image
+  spaceship = new Actor('spaceship');
+  // place the spaceship in the centre of the screen, facing right
+  spaceship.center = [Math.floor(WIDTH / 2), Math.floor(HEIGHT / 2)];
+  spaceship.angle = 0;
+  // set an acceleration for the spaceship
+  spaceship.ACCELERATION = 0.02;
+  // initially the spaceship is stationary
+  spaceship.x_speed = 0;
+  spaceship.y_speed = 0;
+}
+
+function update() {
+  // save the spaceship's current angle,
+  // as changing the actor's image resets the angle to 0
+  let new_angle = spaceship.angle;
+
+  // rotate left on left arrow press
+  if (keyboard[keys.LEFT]) {
+    new_angle += 2;
+  }
+
+  // rotate right on right arrow press
+  if (keyboard[keys.RIGHT]) {
+    new_angle -= 2;
+  }
+
+  // accelerate forwards on up arrow press
+  // and change displayed image
+  if (keyboard[keys.UP]) {
+    spaceship.name = 'spaceship_thrust';
+    spaceship.x_speed += Math.cos(new_angle * Math.PI / 180) * spaceship.ACCELERATION;
+    spaceship.y_speed += Math.sin(new_angle * Math.PI / 180) * spaceship.ACCELERATION;
+  }
+  else {
+    spaceship.name = 'spaceship';
+  }
+
+  // set the new angle
+  spaceship.angle = new_angle;
+
+  // use the x and y speed to update the spaceship position
+  // subtract the y speed as coordinates go from top to bottom
+  spaceship.x += spaceship.x_speed;
+  spaceship.y -= spaceship.y_speed;
+}
+
+function draw() {
+  screen.clear();
+  spaceship.draw();
+}
+
+window.addEventListener('load', (event) => {
+  images.LOAD('#imageLoader img');
+  reset();
+  screen.set_mode('#screen', '#reset', '#pause');
+});
+</script>
+</body>
+
+</html>
